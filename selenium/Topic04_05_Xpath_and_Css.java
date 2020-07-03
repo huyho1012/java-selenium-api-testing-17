@@ -50,7 +50,7 @@ public class Topic04_05_Xpath_and_Css {
     public void TC_04_LoginWithInvalidPass(){
         driver.findElement(By.xpath("//div[@class='footer']//a[contains(text(),'My Account')]")).click();
         driver.findElement(By.xpath("//input[@id ='email']")).sendKeys("automation@gmail.com");
-        driver.findElement(By.xpath("//input[@id = 'pass']")).sendKeys("123123123");
+        driver.findElement(By.xpath("//input[@id ='pass']")).sendKeys("123123123");
         driver.findElement(By.xpath("//button[@id = 'send2']")).click();
         System.out.println(driver.findElement(By.xpath("//span[contains(text(),'Invalid login or password.')]")).getText());
 
@@ -58,14 +58,10 @@ public class Topic04_05_Xpath_and_Css {
 
     @Test
     public void TC_04_LoginWithValidAccountInfo(){
-        driver.findElement(By.cssSelector("header#header div.skip-links > div > a > span.label")).click();
-        driver.findElement(By.cssSelector("div#header-account li.last > a")).click();
-        driver.findElement(By.name("login[username]")).sendKeys("automation@gmail.com");
-        driver.findElement(By.name("login[password]")).sendKeys("123123");
-        driver.findElement(By.name("send")).click();
-        Assert.assertEquals(driver.findElement(By.className("page-title")).getText(), "MY DASHBOARD");
-        Assert.assertEquals(driver.findElement(By.className("welcome-msg")).getText(), "Hello, Automation Testing!");
-        Assert.assertEquals(driver.findElement(By.className("welcome-msg")).getText(), "Hello, Automation Testing!");
+        driver.findElement(By.xpath("//div[@class='footer']//a[contains(text(),'My Account')]")).click();
+        driver.findElement(By.xpath("//input[@id ='email']")).sendKeys("automation@gmail.com");
+        driver.findElement(By.name("//input[@id ='pass']")).sendKeys("123123");
+        driver.findElement(By.xpath("//button[@id = 'send2']")).click();
 
     }
 

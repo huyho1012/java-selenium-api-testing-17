@@ -6,7 +6,6 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.net.PortUnreachableException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -60,7 +59,6 @@ public class Topic04_05_Xpath_and_Css {
         Assert.assertEquals(driver.findElement(By.className("error-msg")).getText(), "Invalid login or password.");
 
     }
-
     @Test
     public void TC_05_LoginWithValidAccountInfo() {
 
@@ -103,10 +101,10 @@ public class Topic04_05_Xpath_and_Css {
         String msgLogoutS = driver.findElement(By.xpath("//div[@class='page-title']//h1")).getText();
         Assert.assertEquals(msgLogoutS, "YOU ARE NOW LOGGED OUT");
     }
-    //    @AfterTest
-//    public void CloseCase(){
-//        driver.close();
-//    }
+    @AfterTest
+    public void CloseCase(){
+        driver.close();
+    }
     public int Random() {
         Random r = new Random();
         return r.nextInt(999999);

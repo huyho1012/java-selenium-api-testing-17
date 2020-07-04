@@ -60,13 +60,21 @@ public class Topic04_05_Xpath_and_Css {
     public void TC_04_LoginWithValidAccountInfo(){
         driver.findElement(By.xpath("//div[@class='footer']//a[contains(text(),'My Account')]")).click();
         driver.findElement(By.xpath("//input[@id ='email']")).sendKeys("automation@gmail.com");
-        driver.findElement(By.name("//input[@id ='pass']")).sendKeys("123123");
+        driver.findElement(By.xpath("//input[@id ='pass']")).sendKeys("123123");
         driver.findElement(By.xpath("//button[@id = 'send2']")).click();
+        driver.findElement(By.xpath("//a[@class='skip-link skip-account']//span[contains(text(),'Account')]")).click();
+        try {
+            Thread.sleep(40000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        driver.findElement(By.xpath("//div[@class ='skip-content skip-active]/ul/li[last()]")).click();
+
 
     }
-
-    @AfterTest
-    public void CloseCase(){
-        driver.close();
-    }
+//
+//    @AfterTest
+//    public void CloseCase(){
+//        driver.close();
+//    }
 }

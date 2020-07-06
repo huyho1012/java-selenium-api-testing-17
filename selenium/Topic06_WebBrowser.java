@@ -67,116 +67,65 @@ public class Topic06_WebBrowser {
         driver.get("https://automationfc.github.io/basic-form/index.html");
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
+    public boolean isDisplay(String xpathValue){
+        if(driver.findElement(By.xpath(xpathValue)).isDisplayed()) return true;
+        return false;
+    }
     @Test
     public void TC_01_WebElement(){
         OpenPage();
-        if(driver.findElement(By.id("mail")).isDisplayed()) {
+        if(isDisplay("//input[@id = 'email']")){
             driver.findElement(By.id("mail")).sendKeys("Automation Testing");
         }
-        if(driver.findElement(By.id("under_18")).isDisplayed()){
+        if(isDisplay("//input[@id = 'under_18']")){
             driver.findElement(By.id("under_18")).click();
         }
-        if(driver.findElement(By.id("edu")).isDisplayed()){
+        if(isDisplay("//textarea[@id = 'edu']")){
             driver.findElement(By.id("edu")).sendKeys("Automation Testing");
+        }
+    }
+    public boolean isEnable(String xpathValue){
+        if(driver.findElement(By.xpath(xpathValue)).isEnabled()){
+            System.out.println("Element is enable");
+            return true;
+        } else {
+            System.out.println("Element is disable");
+            return false;
         }
     }
     @Test
     public void TC_02_WebElement() {
         OpenPage();
-        // Email textbox
-        if (driver.findElement(By.id("mail")).isEnabled()) {
-            System.out.println("Email textbox is Enable");
-        } else {
-            System.out.println("Email textbox is Disable");
-        }
-        // Under 18 radio
-        if (driver.findElement(By.id("under_18")).isEnabled()) {
-            System.out.println("Under 18 radio is Enable");
-        } else {
-            System.out.println("Under 18 radio is Disable");
-        }
-        // Education text area
-        if (driver.findElement(By.id("edu")).isEnabled()) {
-            System.out.println("Education text area is Enable");
-        } else {
-            System.out.println("Education text area is Disable");
-        }
-        // Job Role 01
-        if (driver.findElement(By.id("job1")).isEnabled()) {
-            System.out.println("Job Role 01 is Enable");
-        } else {
-            System.out.println("Job Role 01 is Disable");
-        }
-        // Job Role 02
-        if (driver.findElement(By.id("job2")).isEnabled()) {
-            System.out.println("Job Role 02 dropdown is Enable");
-        } else {
-            System.out.println("Job Role 02 dropdown is Disable");
-        }
-        // Development checkbox
-        if (driver.findElement(By.id("development")).isEnabled()) {
-            System.out.println("Development checkbox is enable");
-        } else {
-            System.out.println("Development checkbox is disable");
-        }
-        // Slider01
-        if (driver.findElement(By.id("slider-1")).isEnabled()) {
-            System.out.println("Slider 01 is enable");
-        } else {
-            System.out.println("Slider 01 is disable");
-        }
-        // Password
-        if (driver.findElement(By.id("password")).isEnabled()) {
-            System.out.println("Password field is Enable");
-        } else {
-            System.out.println("Password field is Disable");
-        }
-        //  Radio button is disabled
-        if (driver.findElement(By.id("radio-disabled")).isEnabled()) {
-            System.out.println(" Radio button is Enable");
-        } else {
-            System.out.println(" Radio button is Disable");
-        }
-        // Biography text area
-        if (driver.findElement(By.id("bio")).isEnabled()) {
-            System.out.println("Biography text area is Enable");
-        } else {
-            System.out.println("Biography text area is Disable");
-        }
-        // Interests (checjbox is disable)
-        if (driver.findElement(By.id("check-disbaled")).isEnabled()) {
-            System.out.println("Chèckbox is Enable");
-        } else {
-            System.out.println("Chèckbox is Disable");
-        }
-        // Job Role 03
-        if (driver.findElement(By.id("job3")).isEnabled()) {
-            System.out.println("Job Role 03 dropdown is Enable");
-        } else {
-            System.out.println("Job Role 03 dropdown is Disable");
-        }
-        // Development checkbox
-        if (driver.findElement(By.id("development")).isEnabled()) {
-            System.out.println("Development checkbox is enable");
-        } else {
-            System.out.println("Development checkbox is disable");
-        }
-        // Slider02
-        if (driver.findElement(By.id("slider-2")).isEnabled()) {
-            System.out.println("Slider 02 is enable");
-        } else {
-            System.out.println("Slider 02 is disable");
-        }
+
+        Assert.assertTrue(isEnable("//input[@id = 'email']"));
+        Assert.assertTrue(isEnable("//input[@id = 'under_18']"));
+        Assert.assertTrue(isEnable("//textarea[@id = 'edu']"));
+        Assert.assertTrue(isEnable("//select[@id = 'job1']"));
+        Assert.assertTrue(isEnable("//select[@id = 'job2']"));
+        Assert.assertTrue(isEnable("//input[@id = 'development']"));
+        Assert.assertTrue(isEnable("//input[@id = 'slider-1']"));
+
+        Assert.assertFalse(isEnable("//input[@id = 'password']"));
+        Assert.assertFalse(isEnable("//input[@id = 'radio-disabled']"));
+        Assert.assertFalse(isEnable("//textarea[@id = 'bio']"));
+        Assert.assertFalse(isEnable("//input[@id = 'check-disbaled']"));
+        Assert.assertFalse(isEnable("//select[@id = 'job3']"));
+        Assert.assertFalse(isEnable("//input[@id = 'slider-2']"));
+    }
+    public boolean isSelected(String xpathValue){
+        if(driver.findElement(By.xpath(xpathValue)).isSelected())
+            return true;
+            return false;
     }
     @Test
     public void TC_03_WebElement() {
         OpenPage();
         driver.findElement(By.id("under_18")).click();
         driver.findElement(By.id("development")).click();
-        Assert.assertTrue(driver.findElement(By.id("under_18")).isSelected());
-        Assert.assertTrue(driver.findElement(By.id("development")).isSelected());
+        Assert.assertTrue(isSelected("//input[@id = 'under_18']"));
+        Assert.assertTrue(isSelected("//input[@id = 'development']"));
         driver.findElement(By.id("development")).click();
-        Assert.assertTrue(!driver.findElement(By.id("development")).isSelected());
+        Assert.assertFalse(isSelected("//input[@id = 'development']"));
     }
 
 }

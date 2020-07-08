@@ -1,13 +1,17 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -77,8 +81,8 @@ public class Topic07_08 {
     @Test
     public void Tcs_01_TextAre() throws ParseException {
         LoginPage();
-
         driver.findElement(By.linkText("New Customer")).click();
+        // Create new customer
         driver.findElement(fullNameTextBox).sendKeys(name);
         driver.findElement(birthdayTextBox).sendKeys(dob);
         driver.findElement(addressTextArea).sendKeys(address);
@@ -89,6 +93,7 @@ public class Topic07_08 {
         driver.findElement(emailTextBox).sendKeys(email);
         driver.findElement(passTextBox).sendKeys(pass);
         driver.findElement(By.name("sub")).click();
+        // Xác minh lại các thông tin hiển thị tại form tạo mới khách hàng với dữ liệu đã nhập trước đó
         Assert.assertEquals(driver.findElement(By.xpath("//td[contains(text(),'Customer Name')]/following-sibling::td")).getText(),name);
         Assert.assertEquals(driver.findElement(By.xpath("//td[contains(text(),'Birthdate')]/following-sibling::td")).getText(),ConvertDate(dob));
         Assert.assertEquals(driver.findElement(By.xpath("//td[contains(text(),'Address')]/following-sibling::td")).getText(),address);
@@ -98,10 +103,10 @@ public class Topic07_08 {
         Assert.assertEquals(driver.findElement(By.xpath("//td[contains(text(),'Mobile No.')]/following-sibling::td")).getText(),phone);
         Assert.assertEquals(driver.findElement(By.xpath("//td[contains(text(),'Email')]/following-sibling::td")).getText(),email);
         String customerID = driver.findElement(By.xpath("//td[text() = 'Customer ID']/following-sibling::td")).getText();
+        // Điều hướng sang chức năng chỉnh sửa customer
         driver.findElement(By.linkText("Edit Customer")).click();
         driver.findElement(By.name("cusid")).sendKeys(customerID);
         driver.findElement(By.name("AccSubmit")).click();
-
         Assert.assertEquals(driver.findElement(fullNameTextBox).getAttribute("value"),name);
         Assert.assertEquals(driver.findElement(addressTextArea).getAttribute("value"),address);
         // Cập nhạt thông tin mới
@@ -126,14 +131,69 @@ public class Topic07_08 {
         Assert.assertEquals(driver.findElement(By.xpath("//td[contains(text(),'Mobile No.')]/following-sibling::td")).getText(),updatePhone);
         Assert.assertEquals(driver.findElement(By.xpath("//td[contains(text(),'Email')]/following-sibling::td")).getText(),email);
     }
-
-
     public String ConvertDate(String a) throws ParseException {
         SimpleDateFormat fdate = new SimpleDateFormat("dd-mm-yyyy");
         Date date = fdate.parse(dob);
         SimpleDateFormat newfdate = new SimpleDateFormat("yyyy-dd-mm");
         return newfdate.format(date);
-
     }
+    @Test
+    public void TC_02(){
+        driver.get("https://automationfc.github.io/basic-form/index.html");
+        Select job1 = new Select(driver.findElement(By.id("job1")));
+        Assert.assertFalse(job1.isMultiple());
+        job1.selectByVisibleText("Mobile Testing");
+        Assert.assertTrue(job1.getFirstSelectedOption().isSelected());
+        job1.selectByValue("manual");
+        Assert.assertTrue(job1.getFirstSelectedOption().isSelected());
+        job1.selectByIndex(9);
+        Assert.assertTrue(job1.getFirstSelectedOption().isSelected());
+        Assert.assertEquals(job1.getOptions().size(),10);
+        Select job2 = new Select(driver.findElement(By.id("job2")));
+        Assert.assertTrue(job2.isMultiple());
+        job2.selectByVisibleText("Automation");
+        job2.selectByVisibleText("Mobile");
+        job2.selectByVisibleText("Desktop");
+        int numOpt = job2.getAllSelectedOptions().size();
+        Assert.assertEquals(numOpt,3);
 
+        List<WebElement> options  = job2.getAllSelectedOptions();
+
+        for(WebElement option: options){
+            System.out.println(option.getText());
+        }
+        job2.deselectAll();
+        int numOpt2 = job2.getAllSelectedOptions().size();
+        Assert.assertEquals(numOpt2,0);
+    }
+    @Test
+    public void TC_03(){
+        driver.get("https://demo.nopcommerce.com/register");
+        driver.findElement(By.xpath("//a[@class= 'ico-register']")).click();
+        driver.findElement(By.id("gender-male")).click();
+        driver.findElement(By.id("FirstName")).sendKeys("Huy");
+        driver.findElement(By.id("LastName")).sendKeys("Hồ");
+        Select day = new Select(driver.findElement(By.name("DateOfBirthDay")));
+        day.selectByValue("1");
+        int numDay = day.getOptions().size();
+        Assert.assertEquals(numDay,32);
+        Select month = new Select(driver.findElement(By.name("DateOfBirthMonth")));
+        month.selectByValue("5");
+        int numMonth = month.getOptions().size();
+        Assert.assertEquals(numMonth,13);
+        Select year = new Select(driver.findElement(By.name("DateOfBirthYear")));
+        year.selectByValue("1980");
+        int numYear = year.getOptions().size();
+        Assert.assertEquals(numYear,112);
+
+        driver.findElement(By.id("Email")).sendKeys(email);
+        driver.findElement(By.id("Company")).sendKeys("Hahalolo Company");
+        driver.findElement(By.id("Password")).sendKeys("123456");
+        driver.findElement(By.id("ConfirmPassword")).sendKeys("123456");
+        driver.findElement(By.id("register-button")).click();
+
+        Assert.assertTrue(driver.findElement(By.xpath("//a[@class= 'ico-account']")).isDisplayed());
+        Assert.assertTrue(driver.findElement(By.xpath("//a[@class= 'ico-logout']")).isDisplayed());
+        Assert.assertEquals(driver.findElement(By.xpath("//div[@class ='result']")).getText(),"Your registration completed");
+    }
 }

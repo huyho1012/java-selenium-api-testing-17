@@ -68,8 +68,7 @@ public class Topic06_WebBrowser {
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
     public boolean isDisplay(String xpathValue){
-        if(driver.findElement(By.xpath(xpathValue)).isDisplayed()) return true;
-        return false;
+        return driver.findElement(By.xpath(xpathValue)).isDisplayed();
     }
     @Test
     public void TC_01_WebElement(){
@@ -113,9 +112,7 @@ public class Topic06_WebBrowser {
         Assert.assertFalse(isEnable("//input[@id = 'slider-2']"));
     }
     public boolean isSelected(String xpathValue){
-        if(driver.findElement(By.xpath(xpathValue)).isSelected())
-            return true;
-        return false;
+        return driver.findElement(By.xpath(xpathValue)).isSelected();
     }
     @Test
     public void TC_03_WebElement() {

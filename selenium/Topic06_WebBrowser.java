@@ -8,18 +8,10 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
-public class Topic06_WebBrowser {
-    WebDriver driver;
-    public void OpenBrowser(){
-        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/browserDrivers/chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("http://live.demoguru99.com/");
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    }
+public class Topic06_WebBrowser extends Common {
     @Test
     public void TC01_VerifyURL(){
-        OpenBrowser();
+        driver.get("http://live.demoguru99.com/");
         driver.findElement(By.xpath("//div[@class= 'footer']//a[@title = 'My Account']")).click();
         Assert.assertEquals("Customer Login", driver.getTitle());
         Assert.assertEquals("http://live.demoguru99.com/index.php/customer/account/login/", driver.getCurrentUrl());
@@ -28,7 +20,7 @@ public class Topic06_WebBrowser {
     }
     @Test
     public void TC02_VerifyTitle(){
-        OpenBrowser();
+        driver.get("http://live.demoguru99.com/");
         driver.findElement(By.xpath("//div[@class= 'footer']//a[@title = 'My Account']")).click();
         Assert.assertEquals("Customer Login", driver.getTitle());
         driver.findElement(By.xpath("//div[@class='buttons-set']//span[contains(text(),'Create an Account')]")).click();
@@ -36,7 +28,7 @@ public class Topic06_WebBrowser {
     }
     @Test
     public void TC03_NavigationFunction(){
-        OpenBrowser();
+        driver.get("http://live.demoguru99.com/");
         driver.findElement(By.xpath("//div[@class= 'footer']//a[@title = 'My Account']")).click();
         driver.findElement(By.xpath("//div[@class='buttons-set']//span[contains(text(),'Create an Account')]")).click();
         Assert.assertEquals("http://live.demoguru99.com/index.php/customer/account/create/", driver.getCurrentUrl());
@@ -47,7 +39,7 @@ public class Topic06_WebBrowser {
     }
     @Test
     public void TC04_GetPageSource(){
-        OpenBrowser();
+        driver.get("http://live.demoguru99.com/");
         driver.findElement(By.xpath("//div[@class= 'footer']//a[@title = 'My Account']")).click();
         String sourceLogin = driver.getPageSource();
         Assert.assertTrue(sourceLogin.contains("Login or Create an Account"));
@@ -55,25 +47,12 @@ public class Topic06_WebBrowser {
         String sourceRegister = driver.getPageSource();
         Assert.assertTrue(sourceRegister.contains("Create an Account"));
     }
-//    @AfterTest
-//    public  void Close(){
-//        driver.close();
-//    }
-
-    public void OpenPage(){
-        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/browserDrivers/chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://automationfc.github.io/basic-form/index.html");
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    }
     public boolean isDisplay(String xpathValue){
-        if(driver.findElement(By.xpath(xpathValue)).isDisplayed()) return true;
-        return false;
+        return driver.findElement(By.xpath(xpathValue)).isDisplayed();
     }
     @Test
     public void TC_01_WebElement(){
-        OpenPage();
+        driver.get("https://automationfc.github.io/basic-form/index.html");
         if(isDisplay("//input[@id = 'email']")){
             driver.findElement(By.id("mail")).sendKeys("Automation Testing");
         }
@@ -84,19 +63,9 @@ public class Topic06_WebBrowser {
             driver.findElement(By.id("edu")).sendKeys("Automation Testing");
         }
     }
-    public boolean isEnable(String xpathValue){
-        if(driver.findElement(By.xpath(xpathValue)).isEnabled()){
-            System.out.println("Element is enable");
-            return true;
-        } else {
-            System.out.println("Element is disable");
-            return false;
-        }
-    }
     @Test
     public void TC_02_WebElement() {
-        OpenPage();
-
+        driver.get("https://automationfc.github.io/basic-form/index.html");
         Assert.assertTrue(isEnable("//input[@id = 'email']"));
         Assert.assertTrue(isEnable("//input[@id = 'under_18']"));
         Assert.assertTrue(isEnable("//textarea[@id = 'edu']"));
@@ -112,20 +81,27 @@ public class Topic06_WebBrowser {
         Assert.assertFalse(isEnable("//select[@id = 'job3']"));
         Assert.assertFalse(isEnable("//input[@id = 'slider-2']"));
     }
-    public boolean isSelected(String xpathValue){
-        if(driver.findElement(By.xpath(xpathValue)).isSelected())
-            return true;
-        return false;
-    }
     @Test
     public void TC_03_WebElement() {
-        OpenPage();
+        driver.get("https://automationfc.github.io/basic-form/index.html");
         driver.findElement(By.id("under_18")).click();
         driver.findElement(By.id("development")).click();
         Assert.assertTrue(isSelected("//input[@id = 'under_18']"));
         Assert.assertTrue(isSelected("//input[@id = 'development']"));
         driver.findElement(By.id("development")).click();
         Assert.assertFalse(isSelected("//input[@id = 'development']"));
+    }
+    public boolean isSelected(String xpathValue){
+        return driver.findElement(By.xpath(xpathValue)).isSelected();
+    }
+    public boolean isEnable(String xpathValue){
+        if(driver.findElement(By.xpath(xpathValue)).isEnabled()){
+            System.out.println("Element is enable");
+            return true;
+        } else {
+            System.out.println("Element is disable");
+            return false;
+        }
     }
 
 }

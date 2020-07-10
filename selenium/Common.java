@@ -1,6 +1,8 @@
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
@@ -12,10 +14,12 @@ public class Common {
     WebDriver driver;
     WebDriverWait expcilitWait;
     JavascriptExecutor jsExcector;
+    Actions action;
     @BeforeTest
     public void Precondition() {
         System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/browserDrivers/chromedriver.exe");
         driver = new ChromeDriver();
+        action = new Actions(driver);
         expcilitWait = new WebDriverWait(driver,30);
         jsExcector = (JavascriptExecutor) driver;
         driver.manage().window().maximize();

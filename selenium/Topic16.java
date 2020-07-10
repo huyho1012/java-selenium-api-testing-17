@@ -3,7 +3,11 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
+
 public class Topic16 extends Common{
+    String chromexAutoIT = "libraries\\ÁutoIT\\authen_chrome.exe";
+    String firefoxAutoIT = "libraries\\ÁutoIT\\authen_firefox.exe";
     @Test
     public void TC01(){
         driver.get("https://www.fahasa.com/customer/account/create?attempt=1");
@@ -69,7 +73,27 @@ public class Topic16 extends Common{
         String password = "admin";
         driver.get("http://"+ username+ ":"+ password+ "@" + "the-internet.herokuapp.com/basic_auth");
 
+    }
+    @Test
+    public void TC_5_Authentication(){
+        String username = "admin";
+        String password = "admin";
+        driver.get("http://"+ username+ ":"+ password+ "@" + "the-internet.herokuapp.com/basic_auth");
 
+    }
+    @Test
+    public void TC_5_AuthenticationAutoIT() throws IOException {
+        String username = "admin";
+        String password = "admin";
+        String authenUrl = "http://the-internet.herokuapp.com/basic_auth";
+        if(driver.toString().contains("firefox")) {
+            Runtime.getRuntime().exec(new String[]{firefoxAutoIT, username, password});
+        }
+        else if(driver.toString().contains("chrome")){
+                Runtime.getRuntime().exec(new String[]{chromexAutoIT,username,password});
+        }
+         driver.get(authenUrl);
+        this.setDelay(4);
     }
 
 }

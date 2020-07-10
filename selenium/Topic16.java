@@ -56,11 +56,20 @@ public class Topic16 extends Common{
         ClickByJS(driver.findElement(CheckBox2));
         Assert.assertFalse(driver.findElement(CheckBox2).isSelected());
     }
-    public void ClickByJS(WebElement elment){
-        jsExcector.executeScript("arguments[0].click();",elment);
+
+    public void ClickByJS(WebElement element){
+        jsExcector.executeScript("arguments[0].click();",element);
     }
     public void removeAttribute(WebElement element){
         this.jsExcector.executeScript("arguments[0].removeAttribute('disable')", element);
+    }
+    @Test
+    public void TC_04_Authentication(){
+        String username = "admin";
+        String password = "admin";
+        driver.get("http://"+ username+ ":"+ password+ "@" + "the-internet.herokuapp.com/basic_auth");
+
+
     }
 
 }

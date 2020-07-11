@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-public class Topic16 extends Common{
+public class Topic16_AuthenAlert extends Common{
     String chromexAutoIT = "libraries\\ÁutoIT\\authen_chrome.exe";
     String firefoxAutoIT = "libraries\\ÁutoIT\\authen_firefox.exe";
     @Test

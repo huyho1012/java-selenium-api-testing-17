@@ -1,12 +1,13 @@
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -35,6 +36,23 @@ public class Common {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    public String Readfile(String File) throws IOException {
+        Charset cs = Charset.forName("UTF-8");
+        FileInputStream stream = new FileInputStream(File);
+        try {
+            Reader reader = new BufferedReader(new InputStreamReader(stream,cs));
+            StringBuilder builder = new StringBuilder();
+            char[] buffer = new char[8192];
+            int read;
+            while((read= reader.read(buffer,0,buffer.length))>0){
+                builder.append(buffer,0,read);
+            }
+            return  builder.toString();
+        }finally {
+            stream.close();
+        }
+
     }
 //    @AfterClass
 //    public void afterClass() {

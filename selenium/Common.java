@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeTest;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.sql.Time;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -25,6 +26,7 @@ public class Common {
         jsExcector = (JavascriptExecutor) driver;
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
     }
     public int Random() {
         Random r = new Random();

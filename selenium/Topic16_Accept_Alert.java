@@ -20,6 +20,7 @@ public class Topic16_Accept_Alert extends Common{
         driver.findElement(By.xpath("//div[@class = 'example']/button[contains(text(),'Click for JS Confirm')]")).click();
         alert = driver.switchTo().alert();
         Assert.assertEquals(alert.getText(),"I am a JS Confirm");
+        this.setDelay(5);
         alert.dismiss();
         Assert.assertEquals(driver.findElement(By.xpath("//p[@id = 'result']")).getText(),"You clicked: Cancel");
     }

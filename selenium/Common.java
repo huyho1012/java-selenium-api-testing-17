@@ -17,9 +17,10 @@ public class Common {
     WebDriverWait expcilitWait;
     JavascriptExecutor jsExcector;
     Actions action;
+    String UserPath = System.getProperty("user.dir");
     @BeforeTest
     public void Precondition() {
-        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/browserDrivers/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", UserPath + "/browserDrivers/chromedriver.exe");
         driver = new ChromeDriver();
         action = new Actions(driver);
         expcilitWait = new WebDriverWait(driver,30);

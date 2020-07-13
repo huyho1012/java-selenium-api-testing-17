@@ -1,3 +1,4 @@
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -5,9 +6,40 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-public class Topic16_AuthenAlert extends Common{
+public class Topic09_Alert extends Common{
     String chromexAutoIT = "libraries\\ÁutoIT\\authen_chrome.exe";
     String firefoxAutoIT = "libraries\\ÁutoIT\\authen_firefox.exe";
+    Alert alert;
+    @Test
+    public void TC01_AcceptAlert(){
+        driver.get("https://automationfc.github.io/basic-form/index.html");
+        driver.findElement(By.xpath("//div[@class = 'example']/button[contains(text(),'Click for JS Alert')]")).click();
+        alert = driver.switchTo().alert();
+        Assert.assertEquals(alert.getText(),"I am a JS Alert");
+        alert.accept();
+        Assert.assertEquals(driver.findElement(By.xpath("//p[@id = 'result']")).getText(),"You clicked an alert successfully");
+    }
+    @Test
+    public void TC_02_ConfirmAlert(){
+        driver.get("https://automationfc.github.io/basic-form/index.html");
+        driver.findElement(By.xpath("//div[@class = 'example']/button[contains(text(),'Click for JS Confirm')]")).click();
+        alert = driver.switchTo().alert();
+        Assert.assertEquals(alert.getText(),"I am a JS Confirm");
+        this.setDelay(5);
+        alert.dismiss();
+        Assert.assertEquals(driver.findElement(By.xpath("//p[@id = 'result']")).getText(),"You clicked: Cancel");
+    }
+    @Test
+    public void TC_03_PromptAlert(){
+        String value = "Hahalolo";
+        driver.get("https://automationfc.github.io/basic-form/index.html");
+        driver.findElement(By.xpath("//div[@class = 'example']/button[contains(text(),'Click for JS Prompt')]")).click();
+        alert = driver.switchTo().alert();
+        Assert.assertEquals(alert.getText(),"I am a JS prompt");
+        alert.sendKeys(value);
+        alert.accept();
+        Assert.assertEquals(driver.findElement(By.xpath("//p[@id = 'result']")).getText(),"You entered: "+ value);
+    }
     @Test
     public void TC01(){
         driver.get("https://www.fahasa.com/customer/account/create?attempt=1");
@@ -60,7 +92,6 @@ public class Topic16_AuthenAlert extends Common{
         ClickByJS(driver.findElement(CheckBox2));
         Assert.assertFalse(driver.findElement(CheckBox2).isSelected());
     }
-
     public void ClickByJS(WebElement element){
         jsExcector.executeScript("arguments[0].click();",element);
     }
@@ -90,11 +121,10 @@ public class Topic16_AuthenAlert extends Common{
             Runtime.getRuntime().exec(new String[]{firefoxAutoIT, username, password});
         }
         else if(driver.toString().contains("chrome")){
-                Runtime.getRuntime().exec(new String[]{chromexAutoIT,username,password});
+            Runtime.getRuntime().exec(new String[]{chromexAutoIT,username,password});
         }
-         driver.get(authenUrl);
+        driver.get(authenUrl);
         this.setDelay(4);
     }
 
 }
-

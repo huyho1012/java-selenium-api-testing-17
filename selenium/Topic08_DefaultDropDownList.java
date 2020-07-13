@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class TC08_DefaultDropDownList extends Common{
+public class Topic08_DefaultDropDownList extends Common{
     String email = "huyho" + this.Random() + "@mailinator.com";
     @Test
     public void TC_01() {

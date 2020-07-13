@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
-public class Topic_01_Check_Environment extends Common {
+public class Topic01_CheckEnvironment extends Common {
 
         @Test
         public void TC_01_ValidateCurrentUrl() {

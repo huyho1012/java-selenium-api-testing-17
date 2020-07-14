@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -6,6 +7,7 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.List;
 
 public class Topic14_UploadFile extends Common{
     String file1Name = "huy.jpg";
@@ -38,11 +40,15 @@ public class Topic14_UploadFile extends Common{
     public void TC_01_UploadMoreFileOneTime(){
         driver.get("http://blueimp.github.com/jQuery-File-Upload/");
         driver.findElement(By.xpath("//input[@name ='files[]']")).sendKeys( file1Path+"\n"+file2Path+"\n"+file3Path);
-        Assert.assertTrue(checkBooleanDisplay("//p[text()='"+file1Name+"']/parent::td/following-sibling::td//span[text()='Edit']"));
-        Assert.assertTrue(checkBooleanDisplay("//p[text()='"+file2Name+"']/parent::td/following-sibling::td//span[text()='Edit']"));
-        Assert.assertTrue(checkBooleanDisplay("//p[text()='"+file3Name+"']/parent::td/following-sibling::td//span[text()='Edit']"));
-
-        this.setDelay(1);
+        this.setDelay(4);
+        List<WebElement> downloadList = driver.findElements(By.xpath("//p[@class ='name']"));
+        for(WebElement item :downloadList){
+            if(downloadList.size()<=3){
+                Assert.assertTrue(checkBooleanDisplay("//span[text()='Edit']"));
+                item.findElement(By.xpath("//span[text()='Start']")).click();
+                this.setDelay(3);
+            }
+        }
     }
     @Test
     public void TC02_UploadOneFileWithAutoIT() throws IOException {
@@ -68,10 +74,10 @@ public class Topic14_UploadFile extends Common{
         }
     }
     @Test
-    public void TC04_UploadWithRobo() throws IOException, AWTException {
+    public void TC03_UploadWithRobo() throws IOException, AWTException {
         driver.get("http://blueimp.github.com/jQuery-File-Upload/");
         driver.findElement(By.xpath("//span[contains(@class,'fileinput-button')]")).click();
-        StringSelection select = new StringSelection(file1Path);
+        StringSelection select = new StringSelection(file2Path);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(select,null);
         Robot robot = new Robot();
         this.setDelay(2);
@@ -87,5 +93,16 @@ public class Topic14_UploadFile extends Common{
     }
     public boolean checkBooleanDisplay(String linkURLFile){
         return driver.findElement(By.xpath(linkURLFile)).isDisplayed();
+    }
+    @Test
+    public void TC04_UploadFile() throws IOException {
+        driver.get("https://gofile.io/?t=uploadFiles");
+        driver.findElement(By.xpath("//button[@id ='btnChooseFiles']")).click();
+        this.setDelay(4);
+        if(driver.toString().equals("chrome")){
+            Runtime.getRuntime().exec(new String[]{ uploadMutiFileChrome,file2Path,file3Path,file1Path});
+        } else if(driver.toString().equals("firefox")){
+            Runtime.getRuntime().exec(new String[]{ uploadMutiFileFirefox,file2Path,file3Path,file1Path});
+        }
     }
 }

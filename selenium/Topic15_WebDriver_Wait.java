@@ -1,13 +1,25 @@
-import org.openqa.selenium.By;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.awt.datatransfer.StringSelection;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 public class Topic15_WebDriver_Wait extends Common{
+    FluentWait fluentWait;
+    WebElement element;
+    String file1 = UserPath + "\\UploadFile\\image1.jpg";
+    String file2 = UserPath + "\\UploadFile\\image2.jpg";
 
+    String uploadMoreFIleWithChrome = UserPath + "\\AutoIT\\chromeUploadMultiple.exe";
+    String uploadMoreFIleWithFirefox = UserPath + "\\AutoIT\\firefoxUploadMultiple.exe";
     @Test
     public void TC01_ElementStatus_Visable(){
         driver.get("https://www.facebook.com/");
@@ -97,5 +109,79 @@ public class Topic15_WebDriver_Wait extends Common{
         String text2 = driver.findElement(By.xpath("//span[@class = 'label']")).getText();
         System.out.println(text2);
         Assert.assertEquals(text2, "Sunday, July 5, 2020");
+    }
+    @Test
+    public void TC_07_ExplicitWait() throws IOException {
+        driver.get("https://gofile.io/?t=uploadFiles");
+        driver.findElement(By.id("btnChooseFiles")).click();
+        if (driver.toString().contains("firefox")) {
+            Runtime.getRuntime().exec(new String[]{uploadMoreFIleWithFirefox, file1, file2});
+        } else if (driver.toString().contains("chrome")) {
+            Runtime.getRuntime().exec(new String[]{uploadMoreFIleWithChrome, file1, file2});
+        }
+        List<WebElement> listItemUpload = driver.findElements(By.xpath("//td[@class='sorting_1']"));
+        for(WebElement item: listItemUpload){
+            Assert.assertTrue(driver.findElement(By.xpath("//button[contains(@class,'remove')]")).isDisplayed());
+        }
+        driver.findElement(By.id("btnUpload")).click();
+    }
+    @Test
+    public void TC_08_FluentWait(){
+        driver.get("https://automationfc.github.io/fluent-wait/");
+        expcilitWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("javascript_countdown_time")));
+        FluentWaitedElementAndGetText(By.xpath("//div[@id ='javascript_countdown_time']"), ".getText().endsWith('02')");
+    }
+    @Test
+    public void TC_09_FluentWait() {
+        driver.get("http://the-internet.herokuapp.com/dynamic_loading/2");
+        driver.findElement(By.xpath("//button[text()='Start']")).click();
+    }
+    public WebElement FluentWaitedElement(By locator){
+        FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).
+                withTimeout(Duration.ofSeconds(15))
+                .pollingEvery(Duration.ofSeconds(1))
+                .ignoring(NoSuchElementException.class);
+        WebElement element = wait.until(new Function<WebDriver, WebElement>() {
+            public WebElement apply(WebDriver driver) {
+               return driver.findElement(locator);
+            }
+        });
+        return element;
+    }
+    public String FluentWaitedElementAndGetText(By locator, String condition){
+        element = FluentWaitedElement(locator);
+        FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).
+                withTimeout(Duration.ofSeconds(15))
+                .pollingEvery(Duration.ofSeconds(1))
+                .ignoring(NoSuchElementException.class);
+        String text = wait.until(new Function<WebDriver, String>() {
+            public String apply(WebDriver driver) {
+                boolean status = Boolean.valueOf(element + condition);
+                if(status ==true) return element.getText();
+                return null;
+            }
+        });
+        return text;
+    }
+    public void FluentWaitAndClick(By Locator){
+        FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(15)).pollingEvery(Duration.ofSeconds(1)).ignoring(NoSuchElementException.class);
+        WebElement element = wait.until(new Function<WebDriver, WebElement>() {
+            @Override
+            public WebElement apply(WebDriver driver) {
+                return driver.findElement(Locator);
+            }
+        });
+        element.click();
+    }
+    public Boolean FluentWaitAndCheckDisplay(By Locator) {
+        element = FluentWaitedElement(Locator);
+        FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(15)).pollingEvery(Duration.ofSeconds(1)).ignoring(NoSuchElementException.class);
+        boolean isDisplay = wait.until(new Function<WebDriver, Boolean>() {
+            public Boolean apply(WebDriver driver) {
+            boolean status = element.isDisplayed();
+            return  status;
+            }
+        });
+        return  isDisplay;
     }
 }
